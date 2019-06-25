@@ -9,49 +9,37 @@ from tkinter .scrolledtext import *
 import os
 os.system("start /MIN python servidor.py")
 a = time.asctime()
-winsound.PlaySound(winsound.Beep(300,3000), winsound.SND_ASYNC)
+#winsound.PlaySound(winsound.Beep(300,3000), winsound.SND_ASYNC)
 print("ola")
-time.sleep(2)
 print(a[2])
 
 winsound.PlaySound('audio.mp3', winsound.SND_FILENAME )
 MAX_BYTES = 65535
-host = 'localhost'
-port = 9999
+serverHost = socket.gethostname()
+serverPort = 9999
+mensagem = [b'Ola, Bem vindo!']
 cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-cliente.connect((host,port))
-def receber():
-    while True:
-        msg = cliente.recv(MAX_BYTES)
-        chat.configure(state="normal")
-        chat.insert(END, msg)
-        chat.see(END)
-        chat.configure(state="disabled")
+cliente.connect((serverHost, serverPort))
 
-def enviar(event):
-        chat.configure(state="normal")
-        cliente.send(str(nome + ": " + msg.get()+"\n").encode('utf-8'))
-        chat.insert(END, str(nome+": "+msg.get()+"\n"))
-        msg.delete(0, END)
-        chat.see(END)
-        chat.configure(state="disabled")
+for linha in mensagem:
+    cliente.send(linha)
+    #RESPOSTA DO SERVIDOR
+    data = cliente.recv(1024)
+
+    print('Cliente recebeu:', data)
 
 
-nome = input("Digite seu nome: ")
-janela = Tk()
-janela.geometry("300x200")
-janela.title(("Bate-papo"))
+a = '1'
 
-chat = ScrolledText(janela, height=100, width=80)
-chat.pack()
-chat.configure(state="normal")
-chat.insert(END, "Bem vindo ao chat, {}!\n".format(nome))
-chat.configure(state="disabled")
-msg = Entry(janela, width=100)
-msg.pack()
+jogo = Tabuleiro()
+Tabuleiro.__init__(jogo)
 
-thread = threading.Thread(target=receber)
-thread.start()
-msg.bind("<Return>", enviar)
+Tabuleiro.posicao_disponivel(jogo, 15,15)
 
-janela.mainloop()
+print("BEM-VINDO AO JOGO BATALHA NAVAL!\n\nINFORMACOES DO JOGO:\n\nTAMANHO TABULEIRO:",
+      str(TAM_PADRAO) + "x" + str(TAM_PADRAO), "\nLETRAS: " + LETRAS_TABULEIRO[0] + "-" + LETRAS_TABULEIRO[
+          TAM_PADRAO - 1] + " --> Linhas" + "\nNUMEROS: 1-" + str(TAM_PADRAO) + " --> Colunas")
+cliente.close()
+
+
+

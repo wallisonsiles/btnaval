@@ -3,6 +3,21 @@ import random
 #btnaval.py
 random.seed(datetime.now())
 
+#==================================================CONSTANTES PADRÕES PARA O JOGO==================================================
+
+#Tamanho nxn do tabuleiro.
+TAM_PADRAO = 10
+
+#Letras disponíveis dado o tamanho.
+LETRAS_TABULEIRO = s.ascii_uppercase[0:TAM_PADRAO]
+
+#Index's para representar os diferentes estados do tabuleiro durante o jogo.
+NUM_VAZIO_TABULEIRO = 0
+NUM_TIRO_TABULEIRO = 1
+NUM_NAVIO_TABULEIRO = 2
+NUM_NAVIO_TIRO_TABULEIRO = 3
+
+#================================================================================================================================
 
 class Partida():
     def __init__(self):
@@ -28,7 +43,7 @@ class Partida():
             self.fim = datetime.now()
             return True
 
-
+#================================================================================================================================
 class Tabuleiro():
     def __init__(self):
         self.matriz = [[0 for x in range(14)] for x in range(14)]
@@ -168,4 +183,37 @@ class Tabuleiro():
                 y = random.randint(1, 12)
                 if self.aloca_submarino((x, y)):
                     break
+
+    def imprimirSeuTabuleiro(self):
+        """Método que imprimi o estado do tabuleiro do jogador referente."""
+        posx = 0
+        posy = 0
+        c = 0
+        count_letter = 0
+        print("\t", end="")
+
+        for i in range(0, TAM_PADRAO):
+            print(i + 1, end=" ")
+
+        print()
+
+        print("\t", end="")
+
+        for i in range(0, TAM_PADRAO):
+            print("-", end=" ")
+
+        for i in range(0, TAM_PADRAO ** 2):
+            if c % TAM_PADRAO == 0:
+                print()
+                print("    ", LETRAS_TABULEIRO[count_letter], "|", end="")
+                count_letter += 1
+
+                if c != 0:
+                    posx += 1
+
+                posy = 0
+
+            print(self.__tabMatriz[posx, posy], end=" ")
+            c += 1
+            posy += 1
 
