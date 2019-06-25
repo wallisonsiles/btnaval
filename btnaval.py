@@ -1,6 +1,6 @@
 from datetime import datetime
 import random
-
+#btnaval.py
 random.seed(datetime.now())
 
 
@@ -168,3 +168,4 @@ class Tabuleiro():
                 y = random.randint(1, 12)
                 if self.aloca_submarino((x, y)):
                     break
+
